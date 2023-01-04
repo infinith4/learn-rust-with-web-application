@@ -173,10 +173,12 @@ mod test{
 
     #[tokio::test]
     async fn should_return_hello_world() {
+        let repository = TodoRepositoryForMemory::new();
+
         let req = Request::builder().uri("/").body(Body::empty())
         .unwrap();
 
-        let res = create_app().oneshot(req).await.unwrap();
+        let res = create_app(repository).oneshot(req).await.unwrap();
         let bytes = hyper::body::to_bytes(res.into_body()).await.unwrap();
 
         let body: String = String::from_utf8(bytes.to_vec()).unwrap();
